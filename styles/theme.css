@@ -1,0 +1,61 @@
+/* Theme Engine: Dark Modern (Default) */
+:root, [data-theme="dark"] {
+  --bg-color: #0f172a;
+  --panel-bg: #1e293b;
+  --text-main: #94a3b8;
+  --text-pending: #475569;
+  --text-correct: #38bdf8;
+  --text-incorrect: #f43f5e;
+  --bg-incorrect: rgba(244, 63, 94, 0.15);
+  --caret-color: #38bdf8;
+  --accent-color: #6366f1;
+  --accent-hover: #4f46e5;
+  --border-color: #334155;
+  --font-code: 'JetBrains Mono', monospace;
+  --font-ui: 'Outfit', sans-serif;
+}
+
+/* Monokai Pro Theme */
+[data-theme="monokai"] {
+  --bg-color: #2d2a2e;
+  --panel-bg: #403e41;
+  --text-main: #939293;
+  --text-pending: #5b595c;
+  --text-correct: #a9dc76;
+  --text-incorrect: #ff6188;
+  --bg-incorrect: rgba(255, 97, 136, 0.15);
+  --caret-color: #ffd866;
+  --accent-color: #78dce8;
+  --accent-hover: #52c8d8;
+  --border-color: #5b595c;
+}
+
+/* Cyberpunk Neon Theme */
+[data-theme="cyberpunk"] {
+  --bg-color: #0d0221;
+  --panel-bg: #1a0838;
+  --text-main: #8a75a7;
+  --text-pending: #463065;
+  --text-correct: #00ffcc;
+  --text-incorrect: #ff0055;
+  --bg-incorrect: rgba(255, 0, 85, 0.2);
+  --caret-color: #ffe600;
+  --accent-color: #00ffcc;
+  --accent-hover: #00cc88;
+  --border-color: #3a1c6e;
+}
+
+/* Nordic Frost Theme */
+[data-theme="nord"] {
+  --bg-color: #2e3440;
+  --panel-bg: #3b4252;
+  --text-main: #d8dee9;
+  --text-pending: #4c566a;
+  --text-correct: #a3be8c;
+  --text-incorrect: #bf616a;
+  --bg-incorrect: rgba(191, 97, 106, 0.2);
+  --caret-color: #88c0d0;
+  --accent-color: #81a1c1;
+  --accent-hover: #5e81ac;
+  --border-color: #434c5e;
+}

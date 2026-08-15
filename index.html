@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevType - Master code typing speed and accuracy for JavaScript, Python, C++, Java, and Rust.">
+  <title>DevType // Code Typing Trainer for Developers</title>
+
+  <!-- Google Fonts: JetBrains Mono for authentic code typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,800;1,400&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Style Sheets -->
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+  <div id="app" class="app-container">
+    
+    <!-- Top Header Bar -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">&lt;/&gt;</span>
+        <h1 class="logo-text">Dev<span class="highlight">Type</span></h1>
+      </div>
+
+      <!-- Controls Navbar -->
+      <nav class="controls-nav" aria-label="Typing Configuration">
+        <div class="control-group">
+          <label for="language-select">Language:</label>
+          <select id="language-select" class="select-input">
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="cpp">C+ 0+</option>
+            <option value="java">Java</option>
+            <option value="rust">Rust</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="length-select">Snippet Length:</label>
+          <select id="length-select" class="select-input">
+            <option value="short">Short (1-3 lines)</option>
+            <option value="medium" selected>Medium (4-7 lines)</option>
+            <option value="long">Long (8+ lines)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="theme-select">Theme:</label>
+          <select id="theme-select" class="select-input">
+            <option value="dark">Dark Modern</option>
+            <option value="monokai">Monokai Pro</option>
+            <option value="cyberpunk">Cyberpunk Neon</option>
+            <option value="nord">Nordic Frost</option>
+          </select>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Real-Time Metrics Bar -->
+    <section class="metrics-bar" id="metrics-bar">
+      <div class="metric-card">
+        <span class="metric-label">WPM</span>
+        <span class="metric-value" id="live-wpm">0</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Accuracy</span>
+        <span class="metric-value" id="live-accuracy">100%</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Time</span>
+        <span class="metric-value" id="live-timer">0s</span>
+      </div>
+    </section>
+
+    <!-- Main Typing Arena -->
+    <main class="typing-container">
+       
+      <textarea id="hidden-input" class="hidden-input" autocomplete="off" autocapitalize="none" spellcheck="false" tabindex="-1"></textarea>
+      
+      
+      <div id="code-display" class="code-display" tabindex="0" aria-live="polite" aria-label="Code snippet typing display area">
+         
+        <div class="placeholder-text">Click here or press any key to start typing...</div>
+      </div>
+    </main>
+
+    <!-- Controls / Action Footer -->
+    <footer class="action-footer">
+      <button id="restart-btn" class="btn btn-secondary">
+        <span>🔄 Restart Test</span>
+      </button>
+      <div class="shortcut-hint">
+        Press <kbd>Tab</kbd> + <kbd>Enter</kbd> to restart quickly
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- JavaScript ES6 Modules -->
+  <script type="module" src="scripts/app.js"></script>
+</body>
+</html>
