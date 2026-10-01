@@ -100,6 +100,54 @@
 
   </div>
 
+  <!-- Results Modal -->
+  <div id="results-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2>🎉 Test Completed!</h2>
+        <button id="close-modal-btn" class="close-btn">&times;</button>
+      </header>
+
+
+      <!-- Results Metric Grid -->
+      <div class="modal-metrics">
+        <div class="modal-metric-card">
+          <span class="label">WPM</span>
+          <span class="value" id="final-wpm">0</span>
+        </div>
+        <div class="modal-metric-card">
+          <span class="label">Accuracy</span>
+          <span class="value" id="final-accuracy">100%</span>
+        </div>
+        <div class="modal-metric-card">
+          <span class="label">Time</span>
+          <span class="value" id="final-time">0s</span>
+        </div>
+        <div class="modal-metric-card">
+          <span class="label">Total Typos</span>
+          <span class="value" id="final-errors">0</span>
+        </div>
+      </div>
+
+      <!-- Canvas WPM Graph -->
+      <div class="chart-container">
+        <h3>WPM Speed Curve</h3>
+        <canvas id="wpm-chart" width="600" height="200"></canvas>
+      </div>
+      <!-- Symbol Typo Heatmap -->
+      <div class="heatmap-container">
+        <h3>Symbol Mistake Analysis</h3>
+        <div id="symbol-heatmap" class="heatmap-grid">
+          <!-- Populated dynamically by analytics.js -->
+        </div>
+      </div>
+      <footer class="modal-footer">
+        <button id="modal-restart-btn" class="btn btn-primary">Try Next Snippet 🚀</button>
+      </footer>
+    </div>
+  </div>
+
+
   <!-- JavaScript ES6 Modules -->
   <script type="module" src="scripts/app.js"></script>
 </body>
