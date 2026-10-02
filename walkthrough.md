@@ -135,5 +135,47 @@ DevType is a specialized typing speed and accuracy trainer designed explicitly f
 * **`codeDisplay.addEventListener('click', focusInput)`**: Clicking anywhere inside the code box re-focuses the hidden input proxy, ensuring smooth typing on both desktop and touch devices.
 * **`document.addEventListener('keydown', (e) => handleKeyDown(e))`**: Captures keyboard events at the document root level, routing inputs directly to the typing engine.
 
+---
+
+### Phase 4 & 5 Debugging: Analytics Modal Non-Display Bug (`scripts/typing-engine.js`)
+
+#### 1. Root Cause Analysis: Uncaught `ReferenceError`
+* **Symptom**: Completing a test did not display the results modal or analytics chart/heatmap.
+* **Root Cause**:
+  * Inside `calculateMetrics()`, line 167 executed `wpmHistory.push(wpm);` at the very beginning of the function call.
+  * However, the `wpm` variable was declared via `const wpm = ...` near line 184 inside a nested `else` block.
+  * Attempting to reference `wpm` prior to its declaration placed `wpm` in the JavaScript **Temporal Dead Zone (TDZ)**, raising an uncaught `ReferenceError: wpm is not defined`.
+  * Because JavaScript execution halts immediately upon an uncaught exception, `calculateMetrics()` crashed on every timer interval tick and during `finishTest()`.
+  * As a result, line 158 (`modal.classList.remove('hidden')`) was never reached, leaving `#results-modal` hidden.
+
+#### 2. Resolution Strategy & Variable Scope Ordering
+* **Correct Order of Operations**:
+  1. Calculate `rawElapsedSeconds` from `startTime`.
+  2. Iterate through typed characters and compute `correctCount`.
+  3. Calculate `wpm` (with a time guard for $t < 1.0\text{s}$).
+  4. Push the evaluated `wpm` number into `wpmHistory` array *after* `wpm` is calculated.
+  5. Compute `accuracy` percentage and update DOM text elements (`live-wpm`, `live-accuracy`, `live-timer`).
+* **Modal Unhiding & Chart Triggering**:
+  * With `calculateMetrics()` executing cleanly without runtime exceptions, `finishTest()` populates `#final-wpm`, `#final-accuracy`, `#final-time`, and `#final-errors`.
+  * Calls `renderWpmChart('wpm-chart', wpmHistory)` to render the Canvas graph.
+  * Calls `renderSymbolHeatmap('symbol-heatmap', typoMap)` to render symbol badges.
+  * Removes `.hidden` class from `#results-modal` to present analytics overlay to the user.
+
+---
+
+### Phase 6: LocalStorage Data Persistence (`scripts/storage.js`)
+
+#### 1. Storage Architecture & Web API Integration
+* **`localStorage` Web API**: Native browser storage engine providing key-value string persistence across tab reloads and browser sessions.
+* **Keys & Schemas**:
+  * `'devtype_best_wpm'`: Number representing all-time peak WPM score.
+  * `'devtype_theme'`: String (`'dark'`, `'monokai'`, `'cyberpunk'`, `'nordic'`) tracking active theme.
+  * `'devtype_history'`: JSON stringified array of objects (`[{ date, wpm, accuracy, language, length }]`).
+
+#### 2. Safe Parsing & Exception Guards
+* Encapsulated `localStorage.getItem()` and `localStorage.setItem()` inside `try...catch` blocks to protect against restricted browsing contexts (e.g. private mode, disabled storage).
+
+
+
 
 

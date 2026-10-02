@@ -1,5 +1,6 @@
 import { codeSnippets } from "./snippets.js";
 import { initEngine, handleKeyDown, focusInput } from './typing-engine.js';
+import { getThemePreference, saveThemePreference } from './storage.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const languageSelect = document.getElementById('language-select');
@@ -11,7 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeModalBtn = document.getElementById('close-modal-btn');
   const modalRestartBtn = document.getElementById('modal-restart-btn');
   
-   // Load a snippet based on selected language and length
+  // 1. Restore Persisted Theme on Application Load
+  const savedTheme = getThemePreference();
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  if (themeSelect) themeSelect.value = savedTheme;
+
+  // Load a snippet based on selected language and length
   function loadNewSnippet() {
     const lang = languageSelect.value;
     const len = lengthSelect.value;
@@ -39,9 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Theme Switcher Event Listener
+  // 2. Persist Theme Preference when user changes selection
   themeSelect.addEventListener('change', (e) => {
-    document.documentElement.setAttribute('data-theme', e.target.value);
+    const selectedTheme = e.target.value;
+    document.documentElement.setAttribute('data-theme', selectedTheme);
+    saveThemePreference(selectedTheme);
   });
 
   // Dropdown Change Listeners
@@ -52,10 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
   restartBtn.addEventListener('click', loadNewSnippet);
 
   document.addEventListener('keydown', (e) => { 
-    // Quick Restart Shortcut: Tab + Enter
-    if (e.key === 'Enter' && e.target.tagName !== 'SELECT') {
-    // Allow enter to function in typing engine
-    }
     handleKeyDown(e);
   });
 
@@ -65,4 +69,3 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial Load
   loadNewSnippet();
 });
- 

@@ -1,4 +1,5 @@
 import { renderWpmChart, renderSymbolHeatmap } from './analytics.js';
+import { savePersonalBest, getPersonalBest, saveSessionRecord } from './storage.js';
 
 
 // State Variables
@@ -18,30 +19,35 @@ const wpmDisplay = document.getElementById('live-wpm');
 const accuracyDisplay = document.getElementById('live-accuracy');
 const timerDisplay = document.getElementById('live-timer');
 
+// Initialize typing engine with selected code snippet
 export function initEngine(snippetText) {
-    targetSnippet = snippetText;
-    wpmHistory = [];
-    typoMap = {};
-    typedInput = "";
-    startTime = null;
-    isTestActive = false;
-    totalErrors = 0;
+  targetSnippet = snippetText;
+  wpmHistory = [];
+  typoMap = {};
+  typedInput = "";
+  startTime = null;
+  isTestActive = false;
+  totalErrors = 0;
 
-    if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-    }
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
 
-    wpmDisplay.textContent = '0';
-    accuracyDisplay.textContent = '100%';
-    timerDisplay.textContent = '0s';
+  wpmDisplay.textContent = '0';
+  accuracyDisplay.textContent = '100%';
+  timerDisplay.textContent = '0s';
+  const pbDisplay = document.getElementById('live-pb');
 
-    renderDisplay();
-    focusInput();
+  if (pbDisplay) {
+    pbDisplay.textContent = getPersonalBest();
+  }
 
-}   
+  renderDisplay();
+  focusInput();
+}
 
-// Focus the hidden input proxy for mobile devices so soft keyboards open and desktop physical key events are captured reliably.
+// Focus the hidden input proxy for soft keyboards & desktop focus
 export function focusInput() {
   if (hiddenInput) {
     hiddenInput.focus();
@@ -54,14 +60,17 @@ function renderDisplay() {
   
   const targetChars = targetSnippet.split('');
   const typedChars = typedInput.split('');
+  
   targetChars.forEach((char, index) => {
     const charSpan = document.createElement('span');
-    // Caret Insertion Point
+    
+    // Insert blinking caret at current typing position
     if (index === typedChars.length) {
       const caretSpan = document.createElement('span');
       caretSpan.className = 'caret';
       codeDisplay.appendChild(caretSpan);
     }
+    
     if (index < typedChars.length) {
       if (typedChars[index] === char) {
         charSpan.className = 'char-correct';
@@ -76,18 +85,25 @@ function renderDisplay() {
     }
     codeDisplay.appendChild(charSpan);
   });
-  // Caret at the end of the text
+
+  // Caret at the end of the text block
   if (typedChars.length >= targetChars.length) {
     const caretSpan = document.createElement('span');
     caretSpan.className = 'caret';
     codeDisplay.appendChild(caretSpan);
   }
 }
+
 // Handle Keydown Events
 export function handleKeyDown(e) {
+  const modal = document.getElementById('results-modal');
+  if (modal && !modal.classList.contains('hidden')) {
+    return; // Ignore typing while modal overlay is open
+  }
+
   if (e.key === 'Tab') {
     e.preventDefault();
-    processCharacter('  '); // Insert 2 spaces for tab
+    processCharacter('  '); // Map Tab key to 2 spaces
     return;
   }
   if (e.key === 'Backspace') {
@@ -109,6 +125,7 @@ export function handleKeyDown(e) {
     processCharacter(e.key);
   }
 }
+
 // Process Typed Character
 function processCharacter(char) {
   if (typedInput.length >= targetSnippet.length) return;
@@ -124,6 +141,7 @@ function processCharacter(char) {
   typedInput += char;
   renderDisplay();
   calculateMetrics();
+  
   if (typedInput.length === targetSnippet.length) {
     finishTest();
   }
@@ -142,8 +160,27 @@ function finishTest() {
   clearInterval(timerInterval);
   calculateMetrics();
 
+  const finalWpm = parseInt(wpmDisplay.textContent, 10) || 0;
+  const finalAcc = parseInt(accuracyDisplay.textContent, 10) || 0;
+
+  // Save score & session record to LocalStorage
+  const isNewBest = savePersonalBest(finalWpm);
+
+  // Update PB on metrics bar dynamically
+  const pbDisplay = document.getElementById('live-pb');
+  if (pbDisplay) {
+    pbDisplay.textContent = getPersonalBest();
+  }
+
+  saveSessionRecord({
+    wpm: finalWpm,
+    accuracy: finalAcc,
+    errors: totalErrors,
+    date: new Date().toISOString()
+  });
+
   // Populate Modal Metrics
-  document.getElementById('final-wpm').textContent = wpmDisplay.textContent;
+  document.getElementById('final-wpm').textContent = isNewBest ? `${finalWpm} 🏆 (NEW BEST!)` : finalWpm;
   document.getElementById('final-accuracy').textContent = accuracyDisplay.textContent;
   document.getElementById('final-time').textContent = timerDisplay.textContent;
   document.getElementById('final-errors').textContent = totalErrors;
@@ -152,7 +189,7 @@ function finishTest() {
   renderWpmChart('wpm-chart', wpmHistory);
   renderSymbolHeatmap('symbol-heatmap', typoMap);
 
-  // Open Modal
+  // Open Modal Overlay
   const modal = document.getElementById('results-modal');
   if (modal) {
     modal.classList.remove('hidden');
@@ -163,9 +200,7 @@ function finishTest() {
 // Calculate live typing metrics (WPM, Accuracy, Time)
 function calculateMetrics() {
   if (!startTime) return;
-  if (isTestActive) {
-  wpmHistory.push(wpm);
-}
+
   const rawElapsedSeconds = (Date.now() - startTime) / 1000;
   timerDisplay.textContent = `${Math.floor(rawElapsedSeconds)}s`;
   
@@ -177,12 +212,18 @@ function calculateMetrics() {
     }
   });
 
-  if (rawElapsedSeconds < 1.0) {
-    wpmDisplay.textContent = '0';
-  } else {
+  let wpm = 0;
+  if (rawElapsedSeconds >= 1.0) {
     const timeInMinutes = rawElapsedSeconds / 60;
-    const wpm = Math.round((correctCount / 5) / timeInMinutes);
+    wpm = Math.round((correctCount / 5) / timeInMinutes);
     wpmDisplay.textContent = isNaN(wpm) ? 0 : wpm;
+  } else {
+    wpmDisplay.textContent = '0';
+  }
+
+  // Safely record WPM history after calculation
+  if (isTestActive) {
+    wpmHistory.push(wpm);
   }
 
   const accuracy = typedInput.length > 0 
