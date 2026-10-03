@@ -26,67 +26,67 @@
         <h1 class="logo-text">Dev<span class="highlight">Type</span></h1>
       </div>
 
-      <!-- Controls Navbar -->
+      <!-- Learning Controls Navbar -->
       <nav class="controls-nav" aria-label="Typing Configuration">
+        <!-- New AI Custom Prompt Input -->
+        <div class="control-group ai-input-group">
+          <input type="text" id="ai-topic-input" class="text-input" placeholder="What do you want to learn? (e.g. DFS in C++)" />
+          <button id="generate-ai-btn" class="btn btn-primary btn-small">✨ Generate</button>
+        </div>
+
         <div class="control-group">
-          <label for="language-select">Language:</label>
-          <select id="language-select" class="select-input">
-            <option value="javascript">JavaScript</option>
-            <option value="python">Python</option>
-            <option value="cpp">C+ 0+</option>
-            <option value="java">Java</option>
-            <option value="rust">Rust</option>
+          <label for="playlist-select">Playlist:</label>
+          <select id="playlist-select" class="select-input">
+            <option value="default">Random Snippets (Classic)</option>
+            <option value="dsa_trees">Mastering Trees & Graphs</option>
+            <option value="js_async">JavaScript Async / Promises</option>
           </select>
         </div>
 
         <div class="control-group">
-          <label for="length-select">Snippet Length:</label>
-          <select id="length-select" class="select-input">
-            <option value="short">Short (1-3 lines)</option>
-            <option value="medium" selected>Medium (4-7 lines)</option>
-            <option value="long">Long (8+ lines)</option>
-          </select>
-        </div>
-
-        <div class="control-group">
-          <label for="theme-select">Theme:</label>
-          <select id="theme-select" class="select-input">
-            <option value="dark">Dark Modern</option>
-            <option value="monokai">Monokai Pro</option>
-            <option value="cyberpunk">Cyberpunk Neon</option>
-            <option value="nord">Nordic Frost</option>
-          </select>
+          <button id="settings-btn" class="icon-btn" title="AI Settings">⚙️</button>
         </div>
       </nav>
+
     </header>
 
-    <!-- Real-Time Metrics Bar -->
-    <section class="metrics-bar" id="metrics-bar">
-      <div class="metric-card">
-        <span class="metric-label">WPM</span>
-        <span class="metric-value" id="live-wpm">0</span>
-      </div>
-      <div class="metric-card">
-        <span class="metric-label">Accuracy</span>
-        <span class="metric-value" id="live-accuracy">100%</span>
-      </div>
-      <div class="metric-card">
-        <span class="metric-label">Time</span>
-        <span class="metric-value" id="live-timer">0s</span>
-      </div>
-    </section>
+    <!-- Dual-Pane Layout -->
+    <div class="split-layout">
+      
+      <!-- LEFT PANE: Active Typing Arena -->
+      <div class="typing-pane">
+        <!-- Real-Time Metrics Bar -->
+        <section class="metrics-bar" id="metrics-bar">
+          <div class="metric-card"><span class="metric-label">WPM</span><span class="metric-value" id="live-wpm">0</span></div>
+          <div class="metric-card"><span class="metric-label">Accuracy</span><span class="metric-value" id="live-accuracy">100%</span></div>
+          <div class="metric-card"><span class="metric-label">Time</span><span class="metric-value" id="live-timer">0s</span></div>
+          <div class="metric-card"><span class="metric-label">PB</span><span class="metric-value" id="live-pb">0</span></div>
+        </section>
 
-    <!-- Main Typing Arena -->
-    <main class="typing-container">
-       
-      <textarea id="hidden-input" class="hidden-input" autocomplete="off" autocapitalize="none" spellcheck="false" tabindex="-1"></textarea>
-      
-      
-      <div id="code-display" class="code-display" tabindex="0" aria-live="polite" aria-label="Code snippet typing display area">
-         
-        <div class="placeholder-text">Click here or press any key to start typing...</div>
+        <!-- Main Typing Arena -->
+        <main class="typing-container">
+          <textarea id="hidden-input" class="hidden-input" autocomplete="off" autocapitalize="none" spellcheck="false" tabindex="-1"></textarea>
+          <div id="code-display" class="code-display" tabindex="0" aria-live="polite">
+            <div class="placeholder-text">Select a playlist or ask the AI to start learning...</div>
+          </div>
+        </main>
       </div>
-    </main>
+
+      <!-- RIGHT PANE: Knowledge Hub -->
+      <aside class="knowledge-pane">
+        <header class="knowledge-header">
+          <h2 id="knowledge-title">Knowledge Hub</h2>
+          <span id="phase-badge" class="badge hidden">Phase 1 / 3</span>
+        </header>
+        <div id="knowledge-content" class="markdown-body">
+          <p class="empty-state">Your educational breakdown will appear here. Start typing to kinesthetically learn the concepts line-by-line.</p>
+        </div>
+        <footer class="knowledge-footer">
+          <button id="next-phase-btn" class="btn btn-secondary hidden">Next Phase ➡️</button>
+        </footer>
+      </aside>
+
+    </div>
 
     <!-- Controls / Action Footer -->
     <footer class="action-footer">
@@ -98,6 +98,24 @@
       </div>
     </footer>
 
+  </div>
+
+  <!-- API Settings Modal -->
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="modal-content settings-content">
+      <header class="modal-header">
+        <h2>⚙️ DevType 2.0 Settings</h2>
+        <button id="close-settings-btn" class="close-btn">&times;</button>
+      </header>
+      <div class="settings-body">
+        <label for="api-key-input">Google Gemini API Key (For Custom Learning):</label>
+        <input type="password" id="api-key-input" class="text-input full-width" placeholder="AIzaSy..." />
+        <p class="hint-text">Your key is stored securely in your browser's LocalStorage. It is never sent to any server.</p>
+      </div>
+      <footer class="modal-footer">
+        <button id="save-settings-btn" class="btn btn-primary">Save Key</button>
+      </footer>
+    </div>
   </div>
 
   <!-- Results Modal -->
