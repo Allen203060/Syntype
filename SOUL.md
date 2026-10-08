@@ -7,11 +7,13 @@
 
 ## Current Status
 * **DevType 1.0 Completed**: Base typing engine, Canvas charts, themes, and persistence.
-* **Phase 1 (DevType 2.0) Completed**: Rebuilt `index.html` and `main.css` to support a CSS Grid Dual-Pane layout (Typing Arena + Knowledge Hub) and API Key settings modal.
-* **Phase 2 & 3 In Progress**: Creating `playlist.js` for phase-based learning state machine and `ai-service.js` for Vanilla `fetch` calls to Google Gemini using BYOK architecture.
+* **DevType 2.0 V2 Upgrade Completed**:
+  * **Phase 1 UI**: Dual-Pane layout completed.
+  * **Phase 2 & 3**: Playlist JSON database (`playlist.js`) and BYOK AI service (`ai-service.js`) implemented.
+  * **Phase 4 Integration**: `typing-engine.js` successfully upgraded to a Phased State Machine. `app.js` UI controllers wired for API keys and asynchronous AI Generation. Project is fully functional!
 
 ## Key Decisions & Directives
 1. **Serverless AI Architecture (BYOK)**: User provides their own API key via LocalStorage. No backend needed.
 2. **Dual-Pane UI**: Split-screen design to simultaneously show the active typing snippet and the educational markdown explanation.
 3. **Phased Playlists**: Long concepts are broken into sequential phases.
-4. **Pedagogical Rule**: User writes all JS by hand with detailed line-by-line concept breakdowns. Code review provides exact constructive feedback.
+4. **Pedagogical Rule**: User writes all JS by hand with detailed line-by-line concept breakdowns.

@@ -179,3 +179,7 @@ DevType is a specialized typing speed and accuracy trainer designed explicitly f
 
 
 
+### Milestone: Playlists & Serverless AI Integration
+* Engineered a structured JSON playlist database (`scripts/playlist.js`) simulating a phased curriculum (e.g. JS Async, C++ Tree Traversals).
+* Built `scripts/ai-service.js` leveraging the **Bring Your Own Key (BYOK)** pattern via LocalStorage.
+* Integrated Google Gemini 1.5 REST API via native `fetch()`, using strict System Prompts and `application/json` MIME constraints to guarantee structured curriculum generation.
