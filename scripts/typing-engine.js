@@ -11,6 +11,47 @@ let startTime = null;
 let timerInterval = null;
 let isTestActive = false;
 let totalErrors = 0;
+let activePlaylist = null;
+let activePhaseIndex = 0;
+
+// simple markdown parser
+function parseMarkdown(text) {
+  return text
+    .replace(/### (.*?)\n/g, '<h3>$1</h3>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.*?)`/g, '<code>$1</code>')
+    .replace(/\n/g, '<br/>');
+}
+
+export function loadPlaylist(playlist) {
+  activePlaylist = playlist;
+  activePhaseIndex = 0;
+  wpmHistory = []; 
+  typoMap = {};
+  loadCurrentPhase();
+}
+
+function loadCurrentPhase() {
+  const phaseData = activePlaylist.phases[activePhaseIndex];
+  
+  // Update Right Pane (Knowledge Hub)
+  document.getElementById('knowledge-title').textContent = phaseData.title;
+  document.getElementById('knowledge-content').innerHTML = parseMarkdown(phaseData.knowledge);
+  
+  const badge = document.getElementById('phase-badge');
+  badge.textContent = `Phase ${activePhaseIndex + 1} / ${activePlaylist.phases.length}`;
+  badge.classList.remove('hidden');
+  document.getElementById('next-phase-btn').classList.add('hidden');
+
+  initEngine(phaseData.snippet);
+}
+
+export function advancePhase() {
+  if (activePlaylist && activePhaseIndex < activePlaylist.phases.length - 1) {
+    activePhaseIndex++;
+    loadCurrentPhase();
+  }
+}
 
 // DOM Elements
 const codeDisplay = document.getElementById('code-display');
@@ -184,15 +225,18 @@ function finishTest() {
   document.getElementById('final-accuracy').textContent = accuracyDisplay.textContent;
   document.getElementById('final-time').textContent = timerDisplay.textContent;
   document.getElementById('final-errors').textContent = totalErrors;
-
-  // Render Canvas Chart & Heatmap
-  renderWpmChart('wpm-chart', wpmHistory);
-  renderSymbolHeatmap('symbol-heatmap', typoMap);
-
-  // Open Modal Overlay
-  const modal = document.getElementById('results-modal');
-  if (modal) {
-    modal.classList.remove('hidden');
+  
+  if (activePlaylist && activePhaseIndex < activePlaylist.phases.length - 1) {
+   
+    document.getElementById('next-phase-btn').classList.remove('hidden');
+    document.getElementById('knowledge-title').innerHTML += ' <span style="color:var(--text-correct)">✅</span>';
+  } else {
+    renderWpmChart('wpm-chart', wpmHistory);
+    renderSymbolHeatmap('symbol-heatmap', typoMap);
+    const modal = document.getElementById('results-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+    }
   }
 }
 

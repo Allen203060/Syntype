@@ -3,11 +3,20 @@
 const API_KEY_STORAGE = 'devtype_gemini_key';
 
 export function saveApiKey(key) {
-  localStorage.setItem(API_KEY_STORAGE, key);
+  try {
+    localStorage.setItem(API_KEY_STORAGE, key);
+  } catch (err) {
+    console.warn("LocalStorage unavailable:", err);
+  }
 }
 
 export function getApiKey() {
-  return localStorage.getItem(API_KEY_STORAGE) || '';
+  try {
+    return localStorage.getItem(API_KEY_STORAGE) || '';
+  } catch (err) {
+    console.warn("LocalStorage unavailable:", err);
+    return '';
+  }
 }
 
 export async function generateLearningPlaylist(topic) {
