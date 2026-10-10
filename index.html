@@ -77,6 +77,81 @@
       color: var(--text-pending);
       font-size: 0.95rem;
     }
+
+    /* Features Section */
+    .features-section {
+      width: 100%;
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .features-title {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+      color: var(--text-main);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .feature-card h4 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .feature-card p {
+      color: var(--text-pending);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: rgba(99, 102, 241, 0.1);
+      color: var(--accent-color);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 2rem;
+    }
   </style>
 </head>
 <body>
@@ -88,23 +163,71 @@
     </header>
 
     <main class="hero-container">
+      <div class="hero-badge">✨ Powered by Google Gemini 2.5 Flash</div>
       <h1 class="hero-title">Master the Syntax.</h1>
-      <p class="hero-subtitle">Stop typing random words. Start building muscle memory for real algorithms, async functions, and data structures with our AI-powered coding trainer.</p>
+      <p class="hero-subtitle">Stop typing random words. Start building muscle memory for real algorithms, async functions, and data structures with our AI-powered kinesthetic coding trainer.</p>
       
       <div class="card-grid">
         <a href="practice.html" class="nav-card">
-          <span style="font-size: 3rem;">⚡</span>
+          <span style="font-size: 3rem; margin-bottom: 1rem;">⚡</span>
           <h3>Practice Arena</h3>
-          <p>Test your raw WPM and accuracy against random snippets of C++, Python, and JS code.</p>
+          <p>Test your raw WPM and accuracy against realistic snippets of C++, Python, Java, Rust, and JavaScript.</p>
         </a>
 
         <a href="learn.html" class="nav-card">
-          <span style="font-size: 3rem;">🧠</span>
+          <span style="font-size: 3rem; margin-bottom: 1rem;">🧠</span>
           <h3>Learning Portal</h3>
-          <p>Generate a phased curriculum using Gemini AI. Learn concepts line-by-line as you type.</p>
+          <p>Generate a phased curriculum using Gemini AI. Build complete projects line-by-line while learning the mechanics.</p>
         </a>
       </div>
     </main>
+
+    <section class="features-section">
+      <h2 class="features-title">Why SynLearn?</h2>
+      <div class="features-grid">
+        
+        <div class="feature-card">
+          <span class="feature-icon">🤖</span>
+          <h4>AI-Powered Generation</h4>
+          <p>Enter any software engineering topic and instantly receive a multi-phase kinesthetic learning playlist tailored to your language of choice.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">📊</span>
+          <h4>Real-Time Analytics</h4>
+          <p>Watch your Words Per Minute (WPM) and Accuracy graph update dynamically as you type. SynLearn automatically persists your all-time highest scores.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">📂</span>
+          <h4>Custom Playlists</h4>
+          <p>Instantly save your favorite AI-generated plans to your browser's LocalStorage and access them later from the unified Playlists modal.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">🎨</span>
+          <h4>Premium Aesthetics</h4>
+          <p>Choose between beautiful glassmorphic themes including Dark (Default), Monokai, Cyberpunk, and Nordic, built entirely in Vanilla CSS.</p>
+        </div>
+        
+        <div class="feature-card">
+          <span class="feature-icon">🔑</span>
+          <h4>Bring Your Own Key (BYOK)</h4>
+          <p>We don't store your data. Securely save your own free Google Gemini API key to your local browser to unlock infinite AI generation.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">⚡</span>
+          <h4>Zero Dependencies</h4>
+          <p>Blazing fast performance. Built with 100% Vanilla HTML5, CSS3, and modern ES6 JavaScript. No NPM bloat, no framework overhead.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>&copy; 2026 SynLearn. Built with ❤️ and Vanilla JS.</p>
+    </footer>
   </div>
 </body>
 </html>
