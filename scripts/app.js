@@ -1,6 +1,7 @@
 import { codeSnippets } from "./snippets.js";
 import { curatedPlaylists } from "./playlist.js";
-import { saveApiKey, getApiKey, generateLearningPlaylist } from "./ai-service.js";
+import { saveApiKey, getApiKey, generatePracticeSnippet } from './ai-service.js';
+import { generateProjectPlan } from './ai-planner.js';
 import { loadPlaylist, advancePhase, handleKeyDown, focusInput } from './typing-engine.js';
 import { getThemePreference, saveThemePreference } from './storage.js';
 
@@ -20,23 +21,58 @@ import { getThemePreference, saveThemePreference } from './storage.js';
   if (themeSelect) themeSelect.value = savedTheme;
 
  
-  function loadSelectedPlaylist() {
-    const playlistId = document.getElementById('playlist-select').value;
+  async function loadSelectedPlaylist() {
+    const playlistSelect = document.getElementById('playlist-select');
+    const playlistId = playlistSelect ? playlistSelect.value : 'default';
     
     if (playlistId === 'default') {
-       
-      const randomSnip = codeSnippets.javascript.medium[0];
+      const lang = document.getElementById('language-select')?.value || 'javascript';
+      const len = document.getElementById('length-select')?.value || 'medium';
+      
+      let randomSnip = "";
+
+      try {
+        const codeDisplay = document.getElementById('code-display');
+        if (codeDisplay && !playlistSelect) {
+          // Visual indicator for practice mode while API is fetching
+          codeDisplay.innerHTML = '<div class="placeholder-text">⏳ Generating random AI snippet...</div>';
+        }
+        
+        // Attempt to generate random snippet via AI
+        randomSnip = await generatePracticeSnippet(lang, len);
+      } catch (err) {
+        // AI Failed (No API key, quota exceeded, offline) - use hardcoded fallback
+        console.warn("AI Snippet generation bypassed, using static fallback.");
+        const snippetArray = codeSnippets[lang]?.[len] || codeSnippets.javascript.medium;
+        randomSnip = snippetArray[Math.floor(Math.random() * snippetArray.length)];
+      }
+
       loadPlaylist({
-        title: "Classic Typing Test",
-        phases: [{ title: "Warmup", knowledge: "No AI explanation loaded.", snippet: randomSnip }]
+        title: "Practice Arena",
+        phases: [{ title: "Random Snippet", knowledge: "No AI explanation loaded.", snippet: randomSnip }]
       });
     } else {
       loadPlaylist(curatedPlaylists[playlistId]);
     }
   }
 
-  document.getElementById('playlist-select').addEventListener('change', loadSelectedPlaylist);
-  document.getElementById('next-phase-btn').addEventListener('click', advancePhase);
+  const playlistSelect = document.getElementById('playlist-select');
+  if (playlistSelect) {
+    playlistSelect.addEventListener('change', loadSelectedPlaylist);
+  }
+
+  if (languageSelect) {
+    languageSelect.addEventListener('change', loadSelectedPlaylist);
+  }
+
+  if (lengthSelect) {
+    lengthSelect.addEventListener('change', loadSelectedPlaylist);
+  }
+
+  const nextPhaseBtn = document.getElementById('next-phase-btn');
+  if (nextPhaseBtn) {
+    nextPhaseBtn.addEventListener('click', advancePhase);
+  }
 
 
   // Modal Close Buttons
@@ -69,56 +105,69 @@ import { getThemePreference, saveThemePreference } from './storage.js';
   // Restart Button Click Listener
   if (restartBtn) restartBtn.addEventListener('click', loadSelectedPlaylist);
 
-  document.addEventListener('keydown', (e) => { 
-    handleKeyDown(e);
-  });
+  const hiddenInput = document.getElementById('hidden-input');
+  if (hiddenInput) {
+    hiddenInput.addEventListener('keydown', handleKeyDown);
+  }
 
-  // Re-focus input when clicking code display area
-  if (codeDisplay) codeDisplay.addEventListener('click', focusInput);
+  // Re-focus input when clicking anywhere in the typing container
+  const typingContainer = document.querySelector('.typing-container');
+  if (typingContainer) typingContainer.addEventListener('click', focusInput);
 
   // --- AI Settings Modal Logic ---
   const settingsModal = document.getElementById('settings-modal');
   const apiKeyInput = document.getElementById('api-key-input');
   
-  document.getElementById('settings-btn').addEventListener('click', () => {
-    apiKeyInput.value = getApiKey(); // Pre-fill saved key
-    settingsModal.classList.remove('hidden');
-  });
+  const settingsBtn = document.getElementById('settings-btn');
+  if (settingsBtn) {
+    settingsBtn.addEventListener('click', () => {
+      if(apiKeyInput) apiKeyInput.value = getApiKey(); 
+      if(settingsModal) settingsModal.classList.remove('hidden');
+    });
+  }
 
-  document.getElementById('close-settings-btn').addEventListener('click', () => {
-    settingsModal.classList.add('hidden');
-  });
+  const closeSettingsBtn = document.getElementById('close-settings-btn');
+  if (closeSettingsBtn) {
+    closeSettingsBtn.addEventListener('click', () => {
+      if(settingsModal) settingsModal.classList.add('hidden');
+    });
+  }
 
-  document.getElementById('save-settings-btn').addEventListener('click', () => {
-    saveApiKey(apiKeyInput.value.trim());
-    settingsModal.classList.add('hidden');
-    alert("API Key Saved Successfully!");
-  });
+  const saveSettingsBtn = document.getElementById('save-settings-btn');
+  if (saveSettingsBtn) {
+    saveSettingsBtn.addEventListener('click', () => {
+      if(apiKeyInput) saveApiKey(apiKeyInput.value.trim());
+      if(settingsModal) settingsModal.classList.add('hidden');
+      alert("API Key Saved Successfully!");
+    });
+  }
 
   // --- AI Playlist Generator Logic ---
   const generateBtn = document.getElementById('generate-ai-btn');
   const topicInput = document.getElementById('ai-topic-input');
 
-  generateBtn.addEventListener('click', async () => {
-    const topic = topicInput.value.trim();
-    if (!topic) return alert("Please enter a topic to learn!");
-    if (!getApiKey()) return alert("Please click the ⚙️ icon to save your Gemini API key first!");
+  if (generateBtn && topicInput) {
+    generateBtn.addEventListener('click', async () => {
+      const topic = topicInput.value.trim();
+      if (!topic) return alert("Please enter a topic to learn!");
+      if (!getApiKey()) return alert("Please click the ⚙️ icon to save your Gemini API key first!");
 
-    try {
-      generateBtn.textContent = "⏳ Generating...";
-      generateBtn.disabled = true;
-      document.getElementById('knowledge-content').innerHTML = "<em>AI is thinking and writing code...</em>";
+      try {
+        generateBtn.textContent = "⏳ Generating...";
+        generateBtn.disabled = true;
+        document.getElementById('knowledge-content').innerHTML = "<em>AI is thinking and writing code...</em>";
 
-      const newPlaylist = await generateLearningPlaylist(topic);
-      loadPlaylist(newPlaylist);
-      
-    } catch (err) {
-      alert("AI Generation Failed: " + err.message);
-    } finally {
-      generateBtn.textContent = "✨ Generate";
-      generateBtn.disabled = false;
-    }
-  });
+        const newPlaylist = await generateProjectPlan(topic);
+        loadPlaylist(newPlaylist);
+        
+      } catch (err) {
+        alert("AI Generation Failed: " + err.message);
+      } finally {
+        generateBtn.textContent = "✨ Generate";
+        generateBtn.disabled = false;
+      }
+    });
+  }
 
   // Initial Load
   loadSelectedPlaylist();

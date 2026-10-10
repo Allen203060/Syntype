@@ -35,13 +35,20 @@ function loadCurrentPhase() {
   const phaseData = activePlaylist.phases[activePhaseIndex];
   
   // Update Right Pane (Knowledge Hub)
-  document.getElementById('knowledge-title').textContent = phaseData.title;
-  document.getElementById('knowledge-content').innerHTML = parseMarkdown(phaseData.knowledge);
+  const titleEl = document.getElementById('knowledge-title');
+  if (titleEl) titleEl.textContent = phaseData.title;
+
+  const contentEl = document.getElementById('knowledge-content');
+  if (contentEl) contentEl.innerHTML = parseMarkdown(phaseData.knowledge);
   
   const badge = document.getElementById('phase-badge');
-  badge.textContent = `Phase ${activePhaseIndex + 1} / ${activePlaylist.phases.length}`;
-  badge.classList.remove('hidden');
-  document.getElementById('next-phase-btn').classList.add('hidden');
+  if (badge) {
+    badge.textContent = `Phase ${activePhaseIndex + 1} / ${activePlaylist.phases.length}`;
+    badge.classList.remove('hidden');
+  }
+
+  const nextBtn = document.getElementById('next-phase-btn');
+  if (nextBtn) nextBtn.classList.add('hidden');
 
   initEngine(phaseData.snippet);
 }
@@ -220,19 +227,34 @@ function finishTest() {
     date: new Date().toISOString()
   });
 
-  // Populate Modal Metrics
-  document.getElementById('final-wpm').textContent = isNewBest ? `${finalWpm} 🏆 (NEW BEST!)` : finalWpm;
-  document.getElementById('final-accuracy').textContent = accuracyDisplay.textContent;
-  document.getElementById('final-time').textContent = timerDisplay.textContent;
-  document.getElementById('final-errors').textContent = totalErrors;
+  // Populate Modal Metrics if modal exists
+  const finalWpmEl = document.getElementById('final-wpm');
+  if (finalWpmEl) finalWpmEl.textContent = isNewBest ? `${finalWpm} 🏆 (NEW BEST!)` : finalWpm;
+
+  const finalAccEl = document.getElementById('final-accuracy');
+  if (finalAccEl) finalAccEl.textContent = accuracyDisplay.textContent;
+
+  const finalTimeEl = document.getElementById('final-time');
+  if (finalTimeEl) finalTimeEl.textContent = timerDisplay.textContent;
+
+  const finalErrorsEl = document.getElementById('final-errors');
+  if (finalErrorsEl) finalErrorsEl.textContent = totalErrors;
   
   if (activePlaylist && activePhaseIndex < activePlaylist.phases.length - 1) {
-   
-    document.getElementById('next-phase-btn').classList.remove('hidden');
-    document.getElementById('knowledge-title').innerHTML += ' <span style="color:var(--text-correct)">✅</span>';
+    const nextBtn = document.getElementById('next-phase-btn');
+    if (nextBtn) nextBtn.classList.remove('hidden');
+
+    const titleEl = document.getElementById('knowledge-title');
+    if (titleEl) titleEl.innerHTML += ' <span style="color:var(--text-correct)">✅</span>';
   } else {
-    renderWpmChart('wpm-chart', wpmHistory);
-    renderSymbolHeatmap('symbol-heatmap', typoMap);
+    // Only render charts if the canvas elements exist
+    if (document.getElementById('wpm-chart')) {
+      renderWpmChart('wpm-chart', wpmHistory);
+    }
+    if (document.getElementById('symbol-heatmap')) {
+      renderSymbolHeatmap('symbol-heatmap', typoMap);
+    }
+    
     const modal = document.getElementById('results-modal');
     if (modal) {
       modal.classList.remove('hidden');

@@ -183,3 +183,12 @@ DevType is a specialized typing speed and accuracy trainer designed explicitly f
 * Engineered a structured JSON playlist database (`scripts/playlist.js`) simulating a phased curriculum (e.g. JS Async, C++ Tree Traversals).
 * Built `scripts/ai-service.js` leveraging the **Bring Your Own Key (BYOK)** pattern via LocalStorage.
 * Integrated Google Gemini 1.5 REST API via native `fetch()`, using strict System Prompts and `application/json` MIME constraints to guarantee structured curriculum generation.
+
+### Milestone: Multi-Page Architecture & AI Planner Evolution
+* Transitioning from a single-page MVP to a multi-page routing architecture (`index.html` as Landing, `practice.html` as Typing Arena, and `learn.html` as the AI Learning Portal).
+* Evolving `ai-service.js` into an AI Project Planner Agent capable of breaking down complex concepts (like LRU Caches or RAG systems) into 5-7 step interactive phased coding challenges.
+
+### Phase 5 Mechanics: The AI Planner Agent (`scripts/ai-planner.js`)
+* **Role-Prompting**: Instructed Gemini 2.5 Flash to adopt the persona of a "Senior Software Architect".
+* **Complex Project Decomposition**: The system prompt forces the LLM to take high-level abstract requests (e.g. "Basic RAG implementation") and break them down into 4 to 7 strictly sequential phases.
+* **Output Structure**: Enforces generation of valid JSON containing pure code snippets (no markdown blocks) and detailed Markdown explanations of architectural trade-offs, enabling DevType 2.0 to dynamically render a full step-by-step project tutorial.

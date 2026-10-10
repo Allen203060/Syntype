@@ -39,6 +39,13 @@
   display: flex;
   align-items: center;
   cursor: text;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Active Focus State Glow */
+.typing-container:focus-within {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 12px var(--accent-color);
 }
 
 .hidden-input {
@@ -58,6 +65,13 @@
   width: 100%;
   outline: none;
   position: relative;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+/* Unfocused Pause State (Blur out the text) */
+.typing-container:not(:focus-within) .code-display {
+  opacity: 0.5;
+  filter: blur(1.5px);
 }
 
 /* Character States */

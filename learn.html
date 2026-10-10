@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevType - Master code typing speed and accuracy for JavaScript, Python, C++, Java, and Rust.">
+  <title>DevType // Code Typing Trainer for Developers</title>
+
+  <!-- Google Fonts: JetBrains Mono for authentic code typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,800;1,400&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Style Sheets -->
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+  <div id="app" class="app-container">
+    
+    <!-- Top Header Bar -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">&lt;/&gt;</span>
+        <h1 class="logo-text">Dev<span class="highlight">Type</span></h1>
+      </div>
+
+      <!-- Learning Controls Navbar -->
+      <nav class="controls-nav" aria-label="Typing Configuration">
+        <div class="control-group">
+          <a href="index.html" class="btn btn-secondary btn-small" style="text-decoration: none; display: flex; align-items: center; justify-content: center; height: 38px;">🏠 Home</a>
+        </div>
+        <!-- New AI Custom Prompt Input -->
+        <div class="control-group ai-input-group">
+          <input type="text" id="ai-topic-input" class="text-input" placeholder="What do you want to learn? (e.g. DFS in C++)" />
+          <button id="generate-ai-btn" class="btn btn-primary btn-small">✨ Generate</button>
+        </div>
+
+        <div class="control-group">
+          <label for="playlist-select">Playlist:</label>
+          <select id="playlist-select" class="select-input">
+            <option value="default">Random Snippets (Classic)</option>
+            <option value="dsa_trees">Mastering Trees & Graphs</option>
+            <option value="js_async">JavaScript Async / Promises</option>
+            <option value="lru_cache_py">LRU Cache (Python)</option>
+            <option value="dfs_cpp">Depth First Search (C++)</option>
+            <option value="os_virtual_memory">OS Virtual Memory (C)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="theme-select">Theme:</label>
+          <select id="theme-select" class="select-input">
+            <option value="dark">Dark Modern</option>
+            <option value="monokai">Monokai Pro</option>
+            <option value="cyberpunk">Cyberpunk Neon</option>
+            <option value="nord">Nordic Frost</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <button id="settings-btn" class="icon-btn" title="AI Settings">⚙️</button>
+        </div>
+      </nav>
+
+    </header>
+
+    <!-- Dual-Pane Layout -->
+    <div class="split-layout">
+      
+      <!-- LEFT PANE: Active Typing Arena -->
+      <div class="typing-pane">
+        <!-- Real-Time Metrics Bar -->
+        <section class="metrics-bar" id="metrics-bar">
+          <div class="metric-card"><span class="metric-label">WPM</span><span class="metric-value" id="live-wpm">0</span></div>
+          <div class="metric-card"><span class="metric-label">Accuracy</span><span class="metric-value" id="live-accuracy">100%</span></div>
+          <div class="metric-card"><span class="metric-label">Time</span><span class="metric-value" id="live-timer">0s</span></div>
+          <div class="metric-card"><span class="metric-label">PB</span><span class="metric-value" id="live-pb">0</span></div>
+        </section>
+
+        <!-- Main Typing Arena -->
+        <main class="typing-container">
+          <textarea id="hidden-input" class="hidden-input" autocomplete="off" autocapitalize="none" spellcheck="false" tabindex="-1"></textarea>
+          <div id="code-display" class="code-display" tabindex="0" aria-live="polite">
+            <div class="placeholder-text">Select a playlist or ask the AI to start learning...</div>
+          </div>
+        </main>
+      </div>
+
+      <!-- RIGHT PANE: Knowledge Hub -->
+      <aside class="knowledge-pane">
+        <header class="knowledge-header">
+          <h2 id="knowledge-title">Knowledge Hub</h2>
+          <span id="phase-badge" class="badge hidden">Phase 1 / 3</span>
+        </header>
+        <div id="knowledge-content" class="markdown-body">
+          <p class="empty-state">Your educational breakdown will appear here. Start typing to kinesthetically learn the concepts line-by-line.</p>
+        </div>
+        <footer class="knowledge-footer">
+          <button id="next-phase-btn" class="btn btn-secondary hidden">Next Phase ➡️</button>
+        </footer>
+      </aside>
+
+    </div>
+
+    <!-- Controls / Action Footer -->
+    <footer class="action-footer">
+      <button id="restart-btn" class="btn btn-secondary">
+        <span>🔄 Restart Test</span>
+      </button>
+      <div class="shortcut-hint">
+        Press <kbd>Tab</kbd> + <kbd>Enter</kbd> to restart quickly
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- API Settings Modal -->
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="modal-content settings-content">
+      <header class="modal-header">
+        <h2>⚙️ DevType 2.0 Settings</h2>
+        <button id="close-settings-btn" class="close-btn">&times;</button>
+      </header>
+      <div class="settings-body">
+        <label for="api-key-input">Google Gemini API Key (For Custom Learning):</label>
+        <input type="password" id="api-key-input" class="text-input full-width" placeholder="AIzaSy..." />
+        <p class="hint-text">Your key is stored securely in your browser's LocalStorage. It is never sent to any server.</p>
+      </div>
+      <footer class="modal-footer">
+        <button id="save-settings-btn" class="btn btn-primary">Save Key</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Results Modal -->
+  <div id="results-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2>🎉 Test Completed!</h2>
+        <button id="close-modal-btn" class="close-btn">&times;</button>
+      </header>
+
+
+      <!-- Results Metric Grid -->
+      <div class="modal-metrics">
+        <div class="modal-metric-card">
+          <span class="label">WPM</span>
+          <span class="value" id="final-wpm">0</span>
+        </div>
+        <div class="modal-metric-card">
+          <span class="label">Accuracy</span>
+          <span class="value" id="final-accuracy">100%</span>
+        </div>
+        <div class="modal-metric-card">
+          <span class="label">Time</span>
+          <span class="value" id="final-time">0s</span>
+        </div>
+        <div class="modal-metric-card">
+          <span class="label">Total Typos</span>
+          <span class="value" id="final-errors">0</span>
+        </div>
+      </div>
+
+      <!-- Canvas WPM Graph -->
+      <div class="chart-container">
+        <h3>WPM Speed Curve</h3>
+        <canvas id="wpm-chart" width="600" height="200"></canvas>
+      </div>
+      <!-- Symbol Typo Heatmap -->
+      <div class="heatmap-container">
+        <h3>Symbol Mistake Analysis</h3>
+        <div id="symbol-heatmap" class="heatmap-grid">
+          <!-- Populated dynamically by analytics.js -->
+        </div>
+      </div>
+      <footer class="modal-footer">
+        <button id="modal-restart-btn" class="btn btn-primary">Try Next Snippet 🚀</button>
+      </footer>
+    </div>
+  </div>
+
+
+  <!-- JavaScript ES6 Modules -->
+  <script type="module" src="scripts/app.js"></script>
+</body>
+</html>

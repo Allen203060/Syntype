@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practice Arena - DevType 2.0</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles/theme.css" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <style>
+    /* Center the typing pane since there is no split layout */
+    .practice-layout {
+      max-width: 900px;
+      margin: 0 auto;
+      padding-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo">
+        <h1>DevType <span class="version">2.0</span></h1>
+      </div>
+
+      <nav class="controls-nav" aria-label="Typing Configuration">
+        <!-- Home Button -->
+        <div class="control-group">
+          <a href="index.html" class="btn btn-secondary btn-small" style="text-decoration: none; display: flex; align-items: center; justify-content: center; height: 38px;">🏠 Home</a>
+        </div>
+        
+        <div class="control-group">
+          <label for="language-select">Language:</label>
+          <select id="language-select" class="select-input">
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="cpp">C++</option>
+            <option value="java">Java</option>
+            <option value="rust">Rust</option>
+            <option value="c">C</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="length-select">Length:</label>
+          <select id="length-select" class="select-input">
+            <option value="short">Short (3-4 lines)</option>
+            <option value="medium">Medium (5-8 lines)</option>
+            <option value="long">Long (10+ lines)</option>
+          </select>
+        </div>
+        
+        <div class="control-group">
+          <label for="theme-select">Theme:</label>
+          <select id="theme-select" class="select-input">
+            <option value="dark">Dark Modern</option>
+            <option value="monokai">Monokai Pro</option>
+            <option value="cyberpunk">Cyberpunk Neon</option>
+            <option value="nord">Nordic Frost</option>
+          </select>
+        </div>
+      </nav>
+    </header>
+
+    <div class="practice-layout">
+      <!-- Active Typing Arena -->
+      <div class="typing-pane">
+        <section class="metrics-bar" id="metrics-bar">
+          <div class="metric-card"><span class="metric-label">WPM</span><span class="metric-value" id="live-wpm">0</span></div>
+          <div class="metric-card"><span class="metric-label">Accuracy</span><span class="metric-value" id="live-accuracy">100%</span></div>
+          <div class="metric-card"><span class="metric-label">Time</span><span class="metric-value" id="live-timer">0s</span></div>
+          <div class="metric-card"><span class="metric-label">PB</span><span class="metric-value" id="live-pb">0</span></div>
+        </section>
+
+        <main class="typing-container">
+          <textarea id="hidden-input" class="hidden-input" autocomplete="off" autocapitalize="none" spellcheck="false" tabindex="-1"></textarea>
+          <div id="code-display" class="code-display" tabindex="0" aria-live="polite">
+            <div class="placeholder-text">Press any key to start typing...</div>
+          </div>
+        </main>
+      </div>
+
+      <footer class="action-footer" style="margin-top: 1.5rem;">
+        <button id="restart-btn" class="btn btn-secondary">
+          <span>🔄 Restart Test</span>
+        </button>
+        <div class="shortcut-hint">
+          Press <kbd>Tab</kbd> + <kbd>Enter</kbd> to restart quickly
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Results Modal -->
+  <div id="results-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2>🎉 Test Completed!</h2>
+        <button id="close-modal-btn" class="close-btn">&times;</button>
+      </header>
+
+      <div class="modal-metrics">
+        <div class="modal-metric-card"><span class="label">WPM</span><span class="value" id="final-wpm">0</span></div>
+        <div class="modal-metric-card"><span class="label">Accuracy</span><span class="value" id="final-accuracy">100%</span></div>
+        <div class="modal-metric-card"><span class="label">Time</span><span class="value" id="final-time">0s</span></div>
+        <div class="modal-metric-card"><span class="label">Total Typos</span><span class="value" id="final-errors">0</span></div>
+      </div>
+
+      <div class="chart-container">
+        <h3>WPM Speed Curve</h3>
+        <canvas id="wpm-chart" width="600" height="200"></canvas>
+      </div>
+      <div class="heatmap-container">
+        <h3>Symbol Mistake Analysis</h3>
+        <div id="symbol-heatmap" class="heatmap-grid"></div>
+      </div>
+      <footer class="modal-footer">
+        <button id="modal-restart-btn" class="btn btn-primary">Try Next Snippet 🚀</button>
+      </footer>
+    </div>
+  </div>
+
+  <script type="module" src="scripts/app.js"></script>
+</body>
+</html>
