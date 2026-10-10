@@ -1,7 +1,7 @@
-# DevType - Developer Code Typing Trainer: Project Walkthrough
+# SynLearn - Developer Code Typing Trainer: Project Walkthrough
 
 ## 1. Project Overview & Architecture
-DevType is a specialized typing speed and accuracy trainer designed explicitly for software developers. Unlike generic text typing tools, DevType tests code syntax navigation, handling indentation, special symbols (`{`, `}`, `(`, `)`, `=>`, `;`), multi-line code blocks, and language-specific code snippets.
+SynLearn is a specialized typing speed and accuracy trainer designed explicitly for software developers. Unlike generic text typing tools, SynLearn tests code syntax navigation, handling indentation, special symbols (`{`, `}`, `(`, `)`, `=>`, `;`), multi-line code blocks, and language-specific code snippets.
 
 ### Core Stack
 * **HTML5**: Semantic layout with accessibility features.
@@ -168,9 +168,9 @@ DevType is a specialized typing speed and accuracy trainer designed explicitly f
 #### 1. Storage Architecture & Web API Integration
 * **`localStorage` Web API**: Native browser storage engine providing key-value string persistence across tab reloads and browser sessions.
 * **Keys & Schemas**:
-  * `'devtype_best_wpm'`: Number representing all-time peak WPM score.
-  * `'devtype_theme'`: String (`'dark'`, `'monokai'`, `'cyberpunk'`, `'nordic'`) tracking active theme.
-  * `'devtype_history'`: JSON stringified array of objects (`[{ date, wpm, accuracy, language, length }]`).
+  * `'synlearn_best_wpm'`: Number representing all-time peak WPM score.
+  * `'synlearn_theme'`: String (`'dark'`, `'monokai'`, `'cyberpunk'`, `'nordic'`) tracking active theme.
+  * `'synlearn_history'`: JSON stringified array of objects (`[{ date, wpm, accuracy, language, length }]`).
 
 #### 2. Safe Parsing & Exception Guards
 * Encapsulated `localStorage.getItem()` and `localStorage.setItem()` inside `try...catch` blocks to protect against restricted browsing contexts (e.g. private mode, disabled storage).
@@ -191,4 +191,4 @@ DevType is a specialized typing speed and accuracy trainer designed explicitly f
 ### Phase 5 Mechanics: The AI Planner Agent (`scripts/ai-planner.js`)
 * **Role-Prompting**: Instructed Gemini 2.5 Flash to adopt the persona of a "Senior Software Architect".
 * **Complex Project Decomposition**: The system prompt forces the LLM to take high-level abstract requests (e.g. "Basic RAG implementation") and break them down into 4 to 7 strictly sequential phases.
-* **Output Structure**: Enforces generation of valid JSON containing pure code snippets (no markdown blocks) and detailed Markdown explanations of architectural trade-offs, enabling DevType 2.0 to dynamically render a full step-by-step project tutorial.
+* **Output Structure**: Enforces generation of valid JSON containing pure code snippets (no markdown blocks) and detailed Markdown explanations of architectural trade-offs, enabling SynLearn 2.0 to dynamically render a full step-by-step project tutorial.

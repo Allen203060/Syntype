@@ -1,6 +1,6 @@
 // AI Service: LocalStorage BYOK & Gemini Integration
 
-const API_KEY_STORAGE = 'devtype_gemini_key';
+const API_KEY_STORAGE = 'synlearn_gemini_key';
 
 export function saveApiKey(key) {
   try {
@@ -96,8 +96,9 @@ export async function generatePracticeSnippet(language, length) {
     Rules:
     1. Output ONLY the raw code snippet. 
     2. Do NOT wrap the code in markdown backticks (e.g. \`\`\`python). Just the raw text.
-    3. Do NOT include any explanations or conversational text.
-    4. Ensure standard indentation and syntactic correctness.
+    3. ABSOLUTELY NO CODE COMMENTS (e.g. //, /* */, or #). The user is typing this out to practice, and comments waste their time.
+    4. Do NOT include any explanations or conversational text.
+    5. Ensure standard indentation and syntactic correctness.
   `;
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;

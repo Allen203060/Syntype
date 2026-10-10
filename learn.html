@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="DevType - Master code typing speed and accuracy for JavaScript, Python, C++, Java, and Rust.">
-  <title>DevType // Code Typing Trainer for Developers</title>
+  <meta name="description" content="SynLearn - Master code typing speed and accuracy for JavaScript, Python, C++, Java, and Rust.">
+  <title>SynLearn // Code Typing Trainer for Developers</title>
 
   <!-- Google Fonts: JetBrains Mono for authentic code typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,7 @@
     <header class="header">
       <div class="logo">
         <span class="logo-icon">&lt;/&gt;</span>
-        <h1 class="logo-text">Dev<span class="highlight">Type</span></h1>
+        <h1 class="logo-text">Syn<span class="highlight">Learn</span></h1>
       </div>
 
       <!-- Learning Controls Navbar -->
@@ -33,20 +33,20 @@
         </div>
         <!-- New AI Custom Prompt Input -->
         <div class="control-group ai-input-group">
-          <input type="text" id="ai-topic-input" class="text-input" placeholder="What do you want to learn? (e.g. DFS in C++)" />
+          <select id="ai-language-select" class="select-input" style="width: 100px;">
+            <option value="javascript">JS</option>
+            <option value="python">Python</option>
+            <option value="cpp">C++</option>
+            <option value="java">Java</option>
+            <option value="rust">Rust</option>
+            <option value="c">C</option>
+          </select>
+          <input type="text" id="ai-topic-input" class="text-input" placeholder="What to learn? (e.g. LRU Cache)" />
           <button id="generate-ai-btn" class="btn btn-primary btn-small">✨ Generate</button>
         </div>
 
         <div class="control-group">
-          <label for="playlist-select">Playlist:</label>
-          <select id="playlist-select" class="select-input">
-            <option value="default">Random Snippets (Classic)</option>
-            <option value="dsa_trees">Mastering Trees & Graphs</option>
-            <option value="js_async">JavaScript Async / Promises</option>
-            <option value="lru_cache_py">LRU Cache (Python)</option>
-            <option value="dfs_cpp">Depth First Search (C++)</option>
-            <option value="os_virtual_memory">OS Virtual Memory (C)</option>
-          </select>
+          <button id="open-playlists-btn" class="btn btn-secondary btn-small">📁 Playlists</button>
         </div>
 
         <div class="control-group">
@@ -97,8 +97,9 @@
         <div id="knowledge-content" class="markdown-body">
           <p class="empty-state">Your educational breakdown will appear here. Start typing to kinesthetically learn the concepts line-by-line.</p>
         </div>
-        <footer class="knowledge-footer">
-          <button id="next-phase-btn" class="btn btn-secondary hidden">Next Phase ➡️</button>
+        <footer class="knowledge-footer" style="display: flex; gap: 1rem; justify-content: space-between;">
+          <button id="save-plan-btn" class="btn btn-primary hidden">💾 Save Plan</button>
+          <button id="next-phase-btn" class="btn btn-secondary hidden" style="margin-left: auto;">Next Phase ➡️</button>
         </footer>
       </aside>
 
@@ -116,11 +117,36 @@
 
   </div>
 
+  <!-- Playlists Modal -->
+  <div id="playlists-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2>📁 Playlists</h2>
+        <button id="close-playlists-btn" class="close-btn">&times;</button>
+      </header>
+      <div class="settings-body" style="min-height: 300px; max-height: 500px; overflow-y: auto;">
+        <div style="margin-bottom: 2rem;">
+          <h3 style="margin-bottom: 0.5rem; color: var(--text-muted);">Curated Playlists</h3>
+          <div id="curated-playlists-list" style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+        
+        <div>
+          <h3 style="margin-bottom: 0.5rem; color: var(--text-muted);">My Saved AI Plans</h3>
+          <div id="saved-playlists-list" style="display: flex; flex-direction: column; gap: 10px;">
+            <p class="empty-state">No saved playlists yet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- API Settings Modal -->
   <div id="settings-modal" class="modal-overlay hidden">
     <div class="modal-content settings-content">
       <header class="modal-header">
-        <h2>⚙️ DevType 2.0 Settings</h2>
+        <h2>⚙️ SynLearn 2.0 Settings</h2>
         <button id="close-settings-btn" class="close-btn">&times;</button>
       </header>
       <div class="settings-body">

@@ -1,13 +1,13 @@
-# Project Soul: Web Project E1 - DevType 2.0 (AI Learning Edition)
+# Project Soul: Web Project E1 - SynLearn 2.0 (AI Learning Edition)
 
 ## Core Architecture & Overview
-* **Project Title**: DevType 2.0 - AI-Powered Active Learning & Code Typing Platform
+* **Project Title**: SynLearn 2.0 - AI-Powered Active Learning & Code Typing Platform
 * **Stack**: Native Web Stack (Vanilla HTML5, Vanilla CSS3, Vanilla JavaScript - ES6+).
 * **Goal**: Transform a static typing tester into a dynamic educational platform using "Curated Playlists" and AI generation. Teach developers complex concepts (DSA, async, memory) through kinesthetic learning (typing) combined with contextual knowledge.
 
 ## Current Status
-* **DevType 1.0 Completed**: Base typing engine, Canvas charts, themes, and persistence.
-* **DevType 2.0 V2 Upgrade Completed**:
+* **SynLearn 1.0 Completed**: Base typing engine, Canvas charts, themes, and persistence.
+* **SynLearn 2.0 V2 Upgrade Completed**:
   * **Phase 1 UI**: Dual-Pane layout completed.
   * **Phase 2 & 3**: Playlist JSON database (`playlist.js`) and BYOK AI service (`ai-service.js`) implemented.
   * **Phase 4 Integration**: `typing-engine.js` successfully upgraded to a Phased State Machine. `app.js` UI controllers wired for API keys and asynchronous AI Generation. Project is fully functional!
